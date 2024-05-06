@@ -1,7 +1,7 @@
 package stack
 
-// StackInterface 栈接口
-type StackInterface interface {
+// Stack 栈接口
+type Stack interface {
 	// Push 压栈
 	Push(v interface{})
 	// Pop 出栈
@@ -12,4 +12,5 @@ type StackInterface interface {
 	Top() interface{}
 	// Flush 清空栈
 	Flush()
+	Print()
 }
