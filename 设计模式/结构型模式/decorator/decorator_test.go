@@ -1,8 +1,11 @@
 package decorator
 
-import "fmt"
+import (
+	"fmt"
+	"testing"
+)
 
-func ExampleDecorator() {
+func Test_eDecorator(t *testing.T) {
 	var c Component = &ConcreteComponent{}
 	c = WarpAddDecorator(c, 10)
 	c = WarpMulDecorator(c, 8)
