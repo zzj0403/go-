@@ -1,5 +1,9 @@
 package sorts
 
+import (
+	"math"
+)
+
 // BubbleSort 冒泡排序
 func BubbleSort(arr []int, n int) {
 	if n <= 1 {
@@ -173,4 +177,129 @@ func partition(arr []int, start, end int) int {
 	arr[i], arr[end] = arr[end], arr[i]
 	return i
 
+}
+
+// TODO 没学会 线性排序
+// BucketSort 桶排序
+func BucketSort(arr []int, n int) {
+	if n <= 1 {
+		return
+	}
+	// 获取待排序数组中最大值
+	max := getMax(arr, n)
+	buckets := make([][]int, n)
+	index := 0
+
+	for i := 0; i < n; i++ {
+		index = arr[i] * (n - 1) / max
+		buckets[index] = append(buckets[index], arr[i])
+	}
+
+	tmpPos := 0 // 标记数组位置
+	for i := 0; i < n; i++ {
+		bucketLen := len(buckets[i])
+		if bucketLen > 0 {
+			QuickSort(buckets[i], bucketLen) // 桶内做快速排序
+			copy(arr[tmpPos:], buckets[i])
+			tmpPos += bucketLen
+		}
+	}
+}
+
+func getMax(arr []int, length int) int {
+	max := arr[0]
+	for i := 1; i < length; i++ {
+		if arr[i] > max {
+			max = arr[i]
+		}
+	}
+	return max
+
+}
+
+// 计数排序（Counting sort）
+func CountingSort(a []int, n int) {
+	if n <= 1 {
+		return
+	}
+	var max int = math.MinInt32
+	// 循环获取最大值
+	for i := range a {
+		if a[i] > max {
+			max = a[i]
+		}
+
+	}
+
+	c := make([]int, max+1)
+	for i := range a {
+		c[a[i]]++
+	}
+	for i := 1; i <= max; i++ {
+		c[i] += c[i-1]
+	}
+
+	r := make([]int, n)
+	for i := n - 1; i >= 0; i-- {
+		index := c[a[i]] - 1
+		r[index] = a[i]
+		c[a[i]]--
+	}
+
+	copy(a, r)
+}
+
+// 获取数组中的最大值
+func getMax1(arr []int) int {
+	max := arr[0]
+	for _, val := range arr {
+		if val > max {
+			max = val
+		}
+	}
+	return max
+}
+
+// 对数组按照指定位数进行计数排序
+func countSort(arr []int, exp int) {
+	n := len(arr)
+	output := make([]int, n) // 用于存储排序结果的临时数组
+	count := make([]int, 10) // 计数数组，用于记录数字出现的次数
+
+	// 初始化计数数组
+	for i := 0; i < 10; i++ {
+		count[i] = 0
+	}
+
+	// 统计每个数字出现的次数
+	for i := 0; i < n; i++ {
+		index := (arr[i] / exp) % 10
+		count[index]++
+	}
+
+	// 将 count[i] 转换为数字在输出数组中的实际位置
+	for i := 1; i < 10; i++ {
+		count[i] += count[i-1]
+	}
+
+	// 根据计数数组中的信息，将数字放入输出数组中
+	for i := n - 1; i >= 0; i-- {
+		index := (arr[i] / exp) % 10
+		output[count[index]-1] = arr[i]
+		count[index]--
+	}
+
+	// 将排序结果复制回原数组
+	for i := 0; i < n; i++ {
+		arr[i] = output[i]
+	}
+}
+
+// 基数排序函数
+func RadixSort(arr []int) {
+	max := getMax1(arr) // 获取数组中的最大值
+	// 从个位开始，对数组进行计数排序，依次按照个位、十位、百位...进行排序
+	for exp := 1; max/exp > 0; exp *= 10 {
+		countSort(arr, exp)
+	}
 }

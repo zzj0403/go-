@@ -41,7 +41,7 @@ func TestMergeSort(t *testing.T) {
 func createRandomArr(length int) []int {
 	arr := make([]int, length)
 	for i := 0; i < length; i++ {
-		arr[i] = rand.Intn(100)
+		arr[i] = rand.Intn(10000000)
 	}
 	return arr
 }
@@ -54,5 +54,19 @@ func TestQuickSort(t *testing.T) {
 	arr := createRandomArr(100)
 	t.Logf("排序前：%v", arr)
 	QuickSort(arr, len(arr))
+	t.Logf("排序后：%v", arr)
+}
+
+func TestBucketSort(t *testing.T) {
+
+	arr := createRandomArr(100)
+	BucketSort(arr, len(arr))
+	t.Log(arr)
+}
+
+func TestRadixSort(t *testing.T) {
+	arr := createRandomArr(100)
+
+	RadixSort(arr)
 	t.Logf("排序后：%v", arr)
 }
